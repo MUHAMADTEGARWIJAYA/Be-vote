@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/auth/vote", voteRoutes); // Menghubungkan vote routes
+app.use("/api/v1/", voteRoutes); // Menghubungkan vote routes
 app.use("/api/v1/auth/admin", adminRoutes);
 
 // Server
