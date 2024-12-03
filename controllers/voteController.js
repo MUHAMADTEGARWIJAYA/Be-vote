@@ -16,7 +16,7 @@ export const vote = async (req, res) => {
     }
 
     // Validasi apakah candidate yang dipilih valid
-    const validCandidates = ["Candidate 1", "Candidate 2"];  // Sesuaikan dengan daftar kandidat yang valid
+    const validCandidates = ["Candidate 1", "Candidate 2"]; // Sesuaikan dengan daftar kandidat yang valid
     if (!validCandidates.includes(candidate)) {
       return res.status(400).json({
         message: "Kandidat tidak valid.",
@@ -25,11 +25,15 @@ export const vote = async (req, res) => {
 
     // Validasi user berdasarkan NIM
     const user = await User.findOne({ nim });
+
     if (!user) {
       return res.status(400).json({
         message: "NIM tidak ditemukan.",
       });
     }
+
+    // Debug: Periksa status hasVoted sebelum melanjutkan
+    console.log(`Status hasVoted untuk NIM ${nim}:`, user.hasVoted);
 
     // Periksa apakah user sudah pernah memilih
     if (user.hasVoted) {
@@ -45,14 +49,15 @@ export const vote = async (req, res) => {
     user.hasVoted = true;
     await user.save();
 
-    console.log("Vote berhasil:", { nim, candidate });
+    // Debug: Pastikan status hasVoted terupdate
+    console.log(`Status hasVoted untuk NIM ${nim} setelah vote:`, user.hasVoted);
 
     res.status(200).json({ message: "Voting berhasil." });
   } catch (error) {
     // Menangani error yang terjadi
     console.error("Error during vote:", error);
 
-    if (error.name === 'ValidationError') {
+    if (error.name === "ValidationError") {
       return res.status(400).json({
         message: "Data tidak valid.",
         error: error.message,
