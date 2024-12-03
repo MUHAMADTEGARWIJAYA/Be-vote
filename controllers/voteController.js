@@ -3,31 +3,22 @@ import Vote from "../models/voteModel.js";
 
 export const vote = async (req, res) => {
   try {
-    // Debug untuk memeriksa data yang diterima dari token dan body
-    console.log("Payload token:", req.user);
+    // Debug untuk memeriksa data yang diterima
     console.log("Request body:", req.body);
 
-    const { candidate } = req.body;
-    const { id, nim } = req.user; // Ambil data dari `verifyToken` (req.user)
+    const { nim, candidate } = req.body;
 
-    // Validasi kandidat
-    if (!candidate) {
-      return res.status(400).json({ message: "Kandidat tidak boleh kosong." });
-    }
-
-    // Validasi user berdasarkan NIM (dari token)
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "Pengguna tidak ditemukan." });
-    }
-
-    if (user.hasVoted) {
-      return res.status(400).json({ message: "Anda sudah memberikan suara." });
+    // Validasi user berdasarkan NIM
+    const user = await User.findOne({ nim });
+    if (!user || user.hasVoted) {
+      return res.status(400).json({
+        message: "User sudah memilih atau NIM tidak valid.",
+      });
     }
 
     // Rekam suara ke database
     await Vote.create({ nim, candidate });
-    user.hasVoted = true; // Tandai user sudah memilih
+    user.hasVoted = true;
     await user.save();
 
     console.log("Vote berhasil:", { nim, candidate });
@@ -37,7 +28,7 @@ export const vote = async (req, res) => {
     console.error("Error during vote:", error);
     res.status(500).json({
       message: "Terjadi kesalahan saat memproses vote.",
-      error: error.message, // Kirimkan pesan error untuk debugging
+      error,
     });
   }
 };
