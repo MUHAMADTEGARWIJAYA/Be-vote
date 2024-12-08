@@ -14,18 +14,29 @@ const loginWindow = {
   end: new Date("2024-12-08T10:00:00Z"),   // Waktu login berakhir (UTC)
 };
 
+// Middleware untuk cek waktu login
 const checkLoginWindow = (req, res, next) => {
   const currentTime = new Date();
 
+  // Jika waktu login belum dimulai
   if (currentTime < loginWindow.start) {
-    return res.status(403).json({ error: "Login belum dimulai." });
+    const timeRemaining = loginWindow.start - currentTime;
+    return res.status(403).json({ 
+      error: `Login belum dimulai. Waktu mulai: ${loginWindow.start.toISOString()}`,
+      timeRemaining
+    });
   }
 
+  // Jika waktu login sudah berakhir
   if (currentTime > loginWindow.end) {
-    return res.status(403).json({ error: "Waktu login telah berakhir." });
+    const timePassed = currentTime - loginWindow.end;
+    return res.status(403).json({
+      error: `Waktu login telah berakhir. Waktu berakhir: ${loginWindow.end.toISOString()}`,
+      timePassed
+    });
   }
 
-  next(); // Jika valid, lanjutkan ke route berikutnya
+  next(); // Lanjutkan ke route berikutnya jika valid
 };
 
 dotenv.config();
