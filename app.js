@@ -10,8 +10,11 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 
 
 const loginWindow = {
-  start: new Date("2024-12-08T08:00:00Z"), // Waktu login dimulai (UTC)
-  end: new Date("2024-12-08T10:00:00Z"),   // Waktu login berakhir (UTC)
+  // Waktu mulai login: 9 Desember 2024, pukul 7 pagi WIB (UTC+7), berarti 8 Desember 2024, pukul 12 malam UTC
+  start: new Date("2024-12-08T00:00:00Z"),  // UTC time for 9 Dec 7 AM WIB
+  
+  // Waktu berakhir login: 9 Desember 2024, pukul 9 pagi WIB (UTC+7), berarti 9 Desember 2024, pukul 2 pagi UTC
+  end: new Date("2024-12-09T02:00:00Z")    // UTC time for 9 Dec 9 AM WIB
 };
 
 // Middleware untuk cek waktu login
