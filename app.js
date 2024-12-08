@@ -11,10 +11,7 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 
 const loginWindow = {
   // Waktu mulai login: 9 Desember 2024, pukul 7 pagi WIB (UTC+7), berarti 8 Desember 2024, pukul 12 malam UTC
-  start: new Date("2024-12-08T00:00:00Z"),  // UTC time for 9 Dec 7 AM WIB
-  
-  // Waktu berakhir login: 9 Desember 2024, pukul 9 pagi WIB (UTC+7), berarti 9 Desember 2024, pukul 2 pagi UTC
-  end: new Date("2024-12-09T02:00:00Z")    // UTC time for 9 Dec 9 AM WIB
+  start: new Date("2024-12-08T00:00:00Z"),
 };
 
 // Middleware untuk cek waktu login
@@ -30,14 +27,6 @@ const checkLoginWindow = (req, res, next) => {
     });
   }
 
-  // Jika waktu login sudah berakhir
-  if (currentTime > loginWindow.end) {
-    const timePassed = currentTime - loginWindow.end;
-    return res.status(403).json({
-      error: `Waktu login telah berakhir. Waktu berakhir: ${loginWindow.end.toISOString()}`,
-      timePassed
-    });
-  }
 
   next(); // Lanjutkan ke route berikutnya jika valid
 };
@@ -62,16 +51,11 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 
 // Endpoint untuk memberikan informasi waktu login
+app.use (loginWindow)
 app.get("/api/v1/auth/login-window", (req, res) => {
-  const currentTime = new Date();
-  const response = {
-    start: loginWindow.start,
-    end: loginWindow.end,
-    currentTime: currentTime,
-    isLoginOpen: currentTime >= loginWindow.start && currentTime <= loginWindow.end,
-  };
-  res.json(response);
+  res.send("Selamat datang di website yang dapat diakses setelah jam 7 pagi WIB!");
 });
+
 
 
 app.use("/api/v1/auth", checkLoginWindow, authRoutes);
