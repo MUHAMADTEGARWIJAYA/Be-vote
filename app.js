@@ -8,6 +8,26 @@ import helmet from "helmet";
 import cors from "cors";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 
+
+const loginWindow = {
+  start: new Date("2024-12-08T08:00:00Z"), // Waktu login dimulai (UTC)
+  end: new Date("2024-12-08T10:00:00Z"),   // Waktu login berakhir (UTC)
+};
+
+const checkLoginWindow = (req, res, next) => {
+  const currentTime = new Date();
+
+  if (currentTime < loginWindow.start) {
+    return res.status(403).json({ error: "Login belum dimulai." });
+  }
+
+  if (currentTime > loginWindow.end) {
+    return res.status(403).json({ error: "Waktu login telah berakhir." });
+  }
+
+  next(); // Jika valid, lanjutkan ke route berikutnya
+};
+
 dotenv.config();
 const port = 3000;
 const app = express();
@@ -26,7 +46,7 @@ app.use(ExpressMongoSanitize());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/auth", checkLoginWindow, authRoutes);
 app.use("/api/v1/", voteRoutes); // Menghubungkan vote routes
 app.use("/api/v1/auth/admin", adminRoutes);
 
