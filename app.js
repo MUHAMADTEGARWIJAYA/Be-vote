@@ -10,7 +10,7 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 
 
 const loginWindow = {
-  start: new Date("2024-12-09T01:00:00Z"), // Waktu login dimulai (UTC)
+  start: new Date("2024-12-10T01:00:00Z"), // Waktu login dimulai (UTC)
   end: new Date("2024-12-10T08:05:00Z"),   // Waktu login berakhir (UTC)
 };
 
@@ -22,7 +22,7 @@ const checkLoginWindow = (req, res, next) => {
   if (currentTime < loginWindow.start) {
     const timeRemaining = loginWindow.start - currentTime;
     return res.status(403).json({ 
-      error: `Login belum dimulai. Waktu mulai: ${loginWindow.start.toISOString()}`,
+      error: `VOTE TELAH BERAKHIR: ${loginWindow.start.toISOString()}`,
       timeRemaining
     });
   }
