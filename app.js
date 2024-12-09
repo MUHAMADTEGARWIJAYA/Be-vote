@@ -10,7 +10,7 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 
 
 const loginWindow = {
-  start: new Date("2024-12-10T01:00:00Z"), // Waktu login dimulai (UTC)
+  start: new Date("2024-12-09T01:00:00Z"), // Waktu login dimulai (UTC)
   end: new Date("2024-12-10T08:05:00Z"),   // Waktu login berakhir (UTC)
 };
 
