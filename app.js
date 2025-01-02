@@ -9,36 +9,6 @@ import cors from "cors";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 
 
-const loginWindow = {
-  start: new Date("2024-12-15T01:00:00Z"), // Waktu login dimulai (UTC)
-  end: new Date("2024-12-15T08:05:00Z"),   // Waktu login berakhir (UTC)
-};
-
-// Middleware untuk cek waktu login
-const checkLoginWindow = (req, res, next) => {
-  const currentTime = new Date();
-
-  // Jika waktu login belum dimulai
-  if (currentTime < loginWindow.start) {
-    const timeRemaining = loginWindow.start - currentTime;
-    return res.status(403).json({ 
-      error: `VOTE TELAH BERAKHIR: ${loginWindow.start.toISOString()}`,
-      timeRemaining
-    });
-  }
-
-  // Jika waktu login sudah berakhir
-  if (currentTime > loginWindow.end) {
-    const timePassed = currentTime - loginWindow.end;
-    return res.status(403).json({
-      error: `Waktu login telah berakhir. Waktu berakhir: ${loginWindow.end.toISOString()}`,
-      timePassed
-    });
-  }
-
-  next(); // Lanjutkan ke route berikutnya jika valid
-};
-
 dotenv.config();
 const port = 3000;
 const app = express();
