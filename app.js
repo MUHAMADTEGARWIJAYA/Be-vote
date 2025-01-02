@@ -26,19 +26,7 @@ app.use(helmet());
 app.use(ExpressMongoSanitize());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 
-// Endpoint untuk memberikan informasi waktu login
-app.get("/api/v1/auth/login-window", (req, res) => {
-  const currentTime = new Date();
-  const response = {
-    start: loginWindow.start,
-    end: loginWindow.end,
-    currentTime: currentTime,
-    isLoginOpen: currentTime >= loginWindow.start && currentTime <= loginWindow.end,
-  };
-  res.json(response);
-});
 
 
 app.use("/api/v1/auth", checkLoginWindow, authRoutes);
