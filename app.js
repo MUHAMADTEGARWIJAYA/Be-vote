@@ -11,7 +11,7 @@ import ExpressMongoSanitize from "express-mongo-sanitize";
 
 const loginWindow = {
   start: new Date("2024-12-15T01:00:00Z"), // Waktu login dimulai (UTC)
-  end: new Date("2030-12-15T08:05:00Z"),   // Waktu login berakhir (UTC)
+  end: new Date("2025-12-15T08:05:00Z"),   // Waktu login berakhir (UTC)
 };
 
 // Middleware untuk cek waktu login
@@ -45,13 +45,7 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(
-  cors({
-    origin: "https://fe-vote.vercel.app", // Ganti dengan domain FE jika di produksi
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(helmet());
 app.use(ExpressMongoSanitize());
 app.use(express.urlencoded({ extended: true }));
